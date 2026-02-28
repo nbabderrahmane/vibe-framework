@@ -341,7 +341,7 @@ training_out/
   log(`  /db_migrate  — DB Migration (anytime)`);
   log(`  /deps        — Dependency Check (anytime)`);
   log(``);
-  log(`Docs: https://github.com/YOUR_USERNAME/vibe-framework`);
+  log(`Docs: https://github.com/nbabderrahmane/vibe-framework`);
   console.log();
 }
 
@@ -523,7 +523,7 @@ function showHelp() {
     /db_migrate       DB Migration (anytime)
     /deps             Dependency Check (anytime)
 
-  Docs: https://github.com/YOUR_USERNAME/vibe-framework
+  Docs: https://github.com/nbabderrahmane/vibe-framework
   `);
 }
 
