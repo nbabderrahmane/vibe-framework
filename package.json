@@ -1,0 +1,34 @@
+{
+  "name": "normy-vibe",
+  "version": "1.0.0",
+  "description": "Industrialized vibecoding framework — gates, agents, context management, session traceability. Ship solo, ship safe.",
+  "main": "bin/cli.js",
+  "bin": {
+    "vibe": "bin/cli.js",
+    "vibe-framework": "bin/cli.js"
+  },
+  "scripts": {
+    "test": "node bin/cli.js --help"
+  },
+  "keywords": [
+    "vibecoding",
+    "ai-development",
+    "framework",
+    "agents",
+    "cursor",
+    "claude",
+    "windsurf",
+    "antigravity",
+    "solo-dev",
+    "quality-gates"
+  ],
+  "author": "Abderrahmane NB",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
