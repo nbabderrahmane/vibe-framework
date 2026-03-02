@@ -5,7 +5,7 @@
 Vibe Framework turns chaotic AI-assisted coding into a structured, traceable, production-ready workflow. Built for solo vibecoders who ship real products with AI IDEs (Cursor, Windsurf, Antigravity, Claude Code).
 
 ```bash
-npx vibe-framework init
+npx normy-vibe init
 ```
 
 ---
