@@ -47,16 +47,16 @@ Rules tiering, context budgets, session boundaries, and snapshots. Your AI never
 
 ```bash
 # Full install (rules + agents + vault + templates)
-npx vibe-framework init
+npx normy-vibe init
 
 # Minimal install (rules + vault only)
-npx vibe-framework init --minimal
+npx normy-vibe init --minimal
 ```
 
 ### Check Health
 
 ```bash
-npx vibe-framework doctor
+npx normy-vibe doctor
 ```
 
 ### Use in Your AI IDE
