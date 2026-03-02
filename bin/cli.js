@@ -133,6 +133,90 @@ async function ask(question, defaultVal) {
   });
 }
 
+// ─── IDE Rule Generator ────────────────────────────────────────────────────────
+function generateIDERule(projectName) {
+  return `# Vibe Framework Orchestrator — Auto-loaded by AI IDE
+# Project: ${projectName}
+# Generated: ${new Date().toISOString().split("T")[0]}
+# Docs: https://github.com/nbabderrahmane/vibe-framework
+
+You are the Vibe Orchestrator for "${projectName}". You guide the developer through a structured vibecoding workflow with quality gates, session logging, and context management.
+
+## ON EVERY CONVERSATION START
+1. Read these files BEFORE your first response:
+   - \`rules_essential.md\` (10 non-negotiable rules — MANDATORY)
+   - \`system_vault/CODE_INVENTORY.md\` (know the codebase)
+   - \`system_vault/CONTEXT_SNAPSHOT.md\` (resume from last session)
+   - \`system_vault/SESSION_LOG.md\` (last 3 entries)
+2. Detect project state by checking which files exist in \`planning_artifacts/\`
+3. Tell the user where the project stands and what the next step is
+
+## STATE DETECTION
+| Files Present | State | Next Step |
+|---|---|---|
+| No rules_essential.md | Not initialized | Tell user: npx normy-vibe init |
+| rules_essential.md only | Ready to start | /brainstorm |
+| BLUEPRINT.md | Brainstorm done | /prd |
+| PRD.md + SFD.md | Step 3a done | /datamodel |
+| DATA_MODEL.md + STATE_MACHINES.md | Step 3b done | /acpack |
+| AC_PACK.md + MASTER_PROMPT.md | Step 3c done | /dev |
+| Code changes exist | Dev in progress | Continue /dev or /review |
+| REVIEW_REPORT.md PASS | Review done | /audit or /qa |
+| audit_out/ exists | Audit done | /qa |
+| QA_REPORT.md PASS | QA done | /release |
+
+## SLASH COMMANDS
+When the user types a command, read the agent file from \`.vibe/agents/\` and become that agent.
+
+/help — Show status + all commands
+/brainstorm — Step 2: Idea → Blueprint (.vibe/agents/01-brainstorm.md)
+/prd — Step 3a: PRD + SFD (.vibe/agents/02-committee.md)
+/datamodel — Step 3b: Data Model + State Machines (.vibe/agents/02-committee.md)
+/acpack — Step 3c: AC Pack + Master Prompt (.vibe/agents/02-committee.md)
+/dev — Step 4: Implement (.vibe/agents/03-dev.md)
+/review — Step 5: Code Review (.vibe/agents/04-reviewer.md)
+/audit — Step 5.5: Full Audit (.vibe/agents/05-audit.md)
+/qa — Step 6: QA (.vibe/agents/06-qa.md)
+/product — Step 6.5: Product Review (.vibe/agents/07-product-reviewer.md)
+/release — Step 7: Release (.vibe/agents/08-release.md)
+/training — Step 7.5: Documentation (.vibe/agents/11-training.md)
+/rca — Step 8: Root Cause Analysis (.vibe/agents/09-rca.md)
+/ux — UI/UX Review (.vibe/agents/10-uiux.md)
+/snapshot — Save Context (.vibe/agents/14-context-manager.md)
+/hotfix — Emergency Fix Flow
+/db_migrate — DB Migration (.vibe/agents/12-db-migration.md)
+/deps — Dependency Check (.vibe/agents/13-dependency.md)
+/status — Full project status
+/onboard — Summary for new person
+
+## GATE ENFORCEMENT
+After each step, check the quality gate. If FAIL → user CANNOT proceed. No exceptions.
+- Gate 2: BLUEPRINT.md exists with all sections
+- Gate 3a: PRD.md + SFD.md exist and are consistent
+- Gate 3b: DATA_MODEL.md + STATE_MACHINES.md exist
+- Gate 3c: AC_PACK.md + MASTER_PROMPT.md exist with testable Given/When/Then
+- Gate 4: P0 ACs covered, tests pass, vault updated
+- Gate 5: REVIEW_REPORT.md = PASS, no blocking issues
+- Gate 5.5: Audit SME score >= 7, no P0 vulnerabilities
+- Gate 6: No P0 bugs, all P0 ACs pass
+- Gate 7: Checklist complete, smoke tests pass
+
+## CONTEXT MANAGEMENT
+- If budget > 70% of context window: STOP, split task
+- If session > 10 messages: produce CONTEXT_SNAPSHOT.md
+- If debug > 5 messages without fix: STOP → snapshot → new chat
+- Read rules_essential.md (2K) ALWAYS. Domain rules ONLY when relevant.
+
+## SESSION LOGGING
+At end of EVERY session, append to system_vault/SESSION_LOG.md:
+- Date, agent used, step, what was done, decisions made, gate result, next action.
+
+## PERSONALITY
+Direct, structured, no fluff. You're a team lead, not a cheerleader.
+Enforce gates firmly but respectfully. Use 🎸 on milestones only.
+`;
+}
+
 // ─── Commands ──────────────────────────────────────────────────────────────────
 
 async function init(minimal = false) {
@@ -312,34 +396,97 @@ training_out/
     success("Created .gitignore");
   }
 
-  // Step 9: Summary
+  // Step 9: Install KICKSTART.md (the single file users paste into their IDE)
+  header("Kickstart File");
+  if (copyFromFramework("KICKSTART.md", "KICKSTART.md")) {
+    success("Installed KICKSTART.md");
+  }
+
+  // Step 10: Auto-detect IDE and install rules
+  header("IDE Configuration");
+  let ideDetected = false;
+
+  // Cursor (.cursor/rules/)
+  if (fs.existsSync(path.join(PROJECT_ROOT, ".cursor")) || fs.existsSync(path.join(PROJECT_ROOT, ".cursorrc"))) {
+    ensureDir(".cursor/rules");
+    const cursorRule = generateIDERule(projectName);
+    writeIfNotExists(path.join(".cursor", "rules", "vibe-orchestrator.mdc"), cursorRule);
+    success("Cursor detected → installed .cursor/rules/vibe-orchestrator.mdc");
+    ideDetected = true;
+  }
+
+  // Windsurf (.windsurfrules)
+  if (fs.existsSync(path.join(PROJECT_ROOT, ".windsurfrules")) || fs.existsSync(path.join(PROJECT_ROOT, ".windsurf"))) {
+    const windRule = generateIDERule(projectName);
+    writeIfNotExists(".windsurfrules", windRule);
+    success("Windsurf detected → updated .windsurfrules");
+    ideDetected = true;
+  }
+
+  // Claude Code (.claude/)
+  if (fs.existsSync(path.join(PROJECT_ROOT, ".claude")) || fs.existsSync(path.join(PROJECT_ROOT, "CLAUDE.md"))) {
+    const claudeRule = generateIDERule(projectName);
+    writeIfNotExists("CLAUDE.md", claudeRule);
+    success("Claude Code detected → updated CLAUDE.md");
+    ideDetected = true;
+  }
+
+  // Antigravity (.antigravity/)
+  if (fs.existsSync(path.join(PROJECT_ROOT, ".antigravity"))) {
+    ensureDir(".antigravity");
+    const agRule = generateIDERule(projectName);
+    writeIfNotExists(path.join(".antigravity", "vibe-orchestrator.md"), agRule);
+    success("Antigravity detected → installed .antigravity/vibe-orchestrator.md");
+    ideDetected = true;
+  }
+
+  // If no IDE detected, create all major ones so the user is covered
+  if (!ideDetected) {
+    info("No AI IDE detected. Creating config files for all supported IDEs...");
+    const rule = generateIDERule(projectName);
+
+    // Cursor
+    ensureDir(".cursor/rules");
+    writeIfNotExists(path.join(".cursor", "rules", "vibe-orchestrator.mdc"), rule);
+    success("Created .cursor/rules/vibe-orchestrator.mdc (Cursor)");
+
+    // Claude Code
+    writeIfNotExists("CLAUDE.md", rule);
+    success("Created CLAUDE.md (Claude Code)");
+
+    // Windsurf
+    ensureDir(".windsurf");
+    writeIfNotExists(path.join(".windsurf", "rules", "vibe-orchestrator.md"), rule);
+    success("Created .windsurf/rules/vibe-orchestrator.md (Windsurf)");
+
+    info("Your AI IDE will auto-load the Orchestrator when you open the project.");
+  }
+
+  // Step 11: Summary
   header("Installation Complete! 🎸");
   log(`Project: ${projectName}`);
   log(`Stack: ${stack}`);
   log(`Agents: ${minimal ? "none (minimal)" : "all installed"}`);
+  log(`IDE Rules: ${ideDetected ? "auto-detected" : "all IDEs configured"}`);
   log(``);
-  log(`Next steps:`);
-  log(`  1. Read rules_essential.md — your 10 non-negotiable rules`);
-  log(`  2. Fill in system_vault/CODE_INVENTORY.md with your project map`);
-  log(`  3. Start with /brainstorm or /prd in your AI IDE`);
+  log(`HOW TO START:`);
+  log(`  1. Open this project in your AI IDE (Cursor, Windsurf, Claude Code...)`);
+  log(`  2. The Orchestrator is already loaded — just start chatting!`);
+  log(`  3. Type /help to see all commands`);
   log(``);
-  log(`Commands available in your AI IDE:`);
-  log(`  /brainstorm  — Brainstorm Agent (Step 2)`);
-  log(`  /prd         — Committee: PRD + SFD (Step 3a)`);
-  log(`  /datamodel   — Committee: Data Model + States (Step 3b)`);
-  log(`  /acpack      — Committee: AC Pack + Master Prompt (Step 3c)`);
-  log(`  /dev         — Dev Agent (Step 4)`);
-  log(`  /review      — Code Review (Step 5)`);
-  log(`  /audit       — Full Audit (Step 5.5)`);
-  log(`  /qa          — QA Testing (Step 6)`);
-  log(`  /product     — Product Alignment (Step 6.5)`);
-  log(`  /release     — Release (Step 7)`);
-  log(`  /training    — User Training (Step 7.5)`);
-  log(`  /rca         — Root Cause Analysis (Step 8)`);
-  log(`  /snapshot    — Context Snapshot (anytime)`);
-  log(`  /hotfix      — Hotfix flow (anytime)`);
-  log(`  /db_migrate  — DB Migration (anytime)`);
-  log(`  /deps        — Dependency Check (anytime)`);
+  log(`The Orchestrator will:`);
+  log(`  → Detect your project state automatically`);
+  log(`  → Guide you to the right next step`);
+  log(`  → Enforce quality gates (no skipping!)`);
+  log(`  → Manage context so the AI never loses track`);
+  log(``);
+  log(`Or use commands directly:`);
+  log(`  /brainstorm  — Structure your idea`);
+  log(`  /dev         — Implement code`);
+  log(`  /review      — Code review`);
+  log(`  /qa          — QA testing`);
+  log(`  /release     — Ship it! 🎸`);
+  log(`  /help        — See all commands`);
   log(``);
   log(`Docs: https://github.com/nbabderrahmane/vibe-framework`);
   console.log();
