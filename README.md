@@ -24,10 +24,13 @@ Vibe Framework fixes this with **gates**, **agents**, **session logging**, and *
 
 ## What You Get
 
+### 🎯 Orchestrator (Your AI Team Lead)
+One agent to rule them all. The Orchestrator auto-detects your project state, guides you to the right next step, and enforces quality gates. You never have to think about "what do I do next" — it tells you.
+
 ### 🚦 Quality Gates
 Every step has a PASS/FAIL gate. If FAIL → you go back. No skipping.
 
-### 🤖 14 Specialized Agents
+### 🤖 15 Specialized Agents
 Each agent is a focused prompt with clear inputs, outputs, and session logging.
 
 ### 📋 Session Traceability
@@ -39,48 +42,51 @@ Rules tiering, context budgets, session boundaries, and snapshots. Your AI never
 ### 🔒 Security-First Rules
 10 non-negotiable rules (`rules_essential.md`) loaded on every single AI response. No exceptions.
 
+### 🔌 IDE Auto-Configuration
+The installer auto-detects your AI IDE and installs the Orchestrator rules. Open your project → the AI already knows the framework.
+
 ---
 
 ## Quick Start
 
-### Install
+### 1. Install
 
 ```bash
-# Full install (rules + agents + vault + templates)
 npx normy-vibe init
-
-# Minimal install (rules + vault only)
-npx normy-vibe init --minimal
 ```
 
-### Check Health
+The installer will:
+- Create all directories (vault, planning, implementation)
+- Install 15 agent prompts
+- Install rules and skills files
+- Set up your system vault with templates
+- **Auto-configure your AI IDE** (Cursor, Windsurf, Claude Code, Antigravity)
+
+### 2. Open your AI IDE
+
+Open your project in Cursor, Windsurf, Claude Code, or any AI IDE. The Orchestrator is already loaded via the IDE config files.
+
+### 3. Start building
+
+Just chat with your AI. The Orchestrator will:
+- Detect that the project is freshly initialized
+- Guide you to start with `/brainstorm`
+- Walk you through every step with quality gates
+
+Or type `/help` to see all available commands.
+
+### Other CLI commands
 
 ```bash
+# Minimal install (rules + vault only, no agents)
+npx normy-vibe init --minimal
+
+# Check project health
 npx normy-vibe doctor
+
+# Show framework status
+npx normy-vibe status
 ```
-
-### Use in Your AI IDE
-
-Copy the relevant agent prompt from `.vibe/agents/` into your AI IDE, or use these trigger commands:
-
-| Command | Step | What It Does |
-|---------|------|-------------|
-| `/brainstorm` | 2 | Structure your idea into a viable Blueprint |
-| `/prd` | 3a | Produce PRD + System Functional Design |
-| `/datamodel` | 3b | Data Model + State Machines |
-| `/acpack` | 3c | Acceptance Criteria + Master Prompt |
-| `/dev` | 4 | Implement code per AC Pack |
-| `/review` | 5 | Code review + doc audit |
-| `/audit` | 5.5 | Full-stack audit (13 dimensions, dual scoring) |
-| `/qa` | 6 | QA testing with declared execution mode |
-| `/product` | 6.5 | Product alignment check |
-| `/release` | 7 | Release preparation + execution |
-| `/training` | 7.5 | User documentation |
-| `/rca` | 8 | Root cause analysis + framework learning |
-| `/snapshot` | Any | Context snapshot for session continuity |
-| `/hotfix` | Any | Fast-track bug fix flow |
-| `/db_migrate` | Any | Safe database migration |
-| `/deps` | Any | Dependency audit |
 
 ---
 
@@ -117,6 +123,34 @@ H6. RCA obligatoire (within 24h)
 
 ---
 
+## Commands
+
+Type these in your AI IDE chat. The Orchestrator handles routing.
+
+| Command | Step | What It Does |
+|---------|------|-------------|
+| `/help` | — | Show project status + all commands |
+| `/brainstorm` | 2 | Structure your idea into a viable Blueprint |
+| `/prd` | 3a | Produce PRD + System Functional Design |
+| `/datamodel` | 3b | Data Model + State Machines |
+| `/acpack` | 3c | Acceptance Criteria + Master Prompt |
+| `/dev` | 4 | Implement code per AC Pack |
+| `/review` | 5 | Code review + doc audit |
+| `/audit` | 5.5 | Full-stack audit (13 dimensions, dual scoring) |
+| `/qa` | 6 | QA testing with declared execution mode |
+| `/product` | 6.5 | Product alignment check |
+| `/release` | 7 | Release preparation + execution |
+| `/training` | 7.5 | User documentation |
+| `/rca` | 8 | Root cause analysis + framework learning |
+| `/snapshot` | Any | Context snapshot for session continuity |
+| `/hotfix` | Any | Fast-track bug fix flow |
+| `/db_migrate` | Any | Safe database migration |
+| `/deps` | Any | Dependency audit |
+| `/status` | Any | Full project status |
+| `/onboard` | Any | Generate summary for new person |
+
+---
+
 ## Context Management (The Killer Feature)
 
 The #1 problem in vibecoding is **context window overflow**. Vibe Framework solves this with:
@@ -141,46 +175,11 @@ Every agent estimates token usage before starting. If > 70% of context window �
 
 ---
 
-## Project Structure
-
-```
-your-project/
-├── rules_essential.md          # 10 P0 rules (< 2K tokens) — always loaded
-├── rules_full.md               # Complete rulebook by domain
-├── skills.md                   # Coding patterns & conventions
-├── rules_uiux.md               # UI/UX rules
-├── skills_uiux.md              # UI/UX patterns & design system
-├── .vibe/
-│   ├── config.yaml             # Framework configuration
-│   └── agents/                 # Agent prompts (14 agents)
-├── system_vault/
-│   ├── LOGS.md                 # Structured changelog
-│   ├── ARCHITECTURE.md         # Architecture decisions
-│   ├── CODE_INVENTORY.md       # Codebase map + patterns
-│   ├── RUNBOOK.md              # How to run/deploy/rollback
-│   ├── SESSION_LOG.md          # Agent session logs (traceability)
-│   └── CONTEXT_SNAPSHOT.md     # Current context for session resume
-├── planning_artifacts/         # Ephemeral planning docs
-│   ├── BLUEPRINT.md
-│   ├── PRD.md
-│   ├── SFD.md
-│   ├── DATA_MODEL.md
-│   ├── STATE_MACHINES.md
-│   ├── AC_PACK.md
-│   └── MASTER_PROMPT.md
-├── implementation_artifacts/   # Implementation docs (stories, sprint)
-├── audit_out/                  # Audit agent outputs
-├── product_audit_out/          # Product reviewer outputs
-├── ux_out/                     # UI/UX agent outputs
-└── training_out/               # Training agent outputs
-```
-
----
-
 ## Agents
 
 | # | Agent | Step | Trigger |
 |---|-------|------|---------|
+| 00 | **Orchestrator** | All | Auto-loaded by IDE |
 | 01 | Brainstorm | 2 | `/brainstorm` |
 | 02 | Vibecoding Committee | 3a/3b/3c | `/prd`, `/datamodel`, `/acpack` |
 | 03 | Dev Agent | 4 | `/dev` |
@@ -204,6 +203,56 @@ Every agent:
 
 ---
 
+## IDE Support
+
+The installer auto-detects and configures:
+
+| IDE | Config File |
+|-----|------------|
+| **Cursor** | `.cursor/rules/vibe-orchestrator.mdc` |
+| **Claude Code** | `CLAUDE.md` |
+| **Windsurf** | `.windsurf/rules/vibe-orchestrator.md` |
+| **Antigravity** | `.antigravity/vibe-orchestrator.md` |
+
+If no IDE is detected, all configs are created so you're covered regardless of which IDE you use.
+
+You can also manually paste `KICKSTART.md` into any AI chat to activate the Orchestrator.
+
+---
+
+## Project Structure
+
+```
+your-project/
+├── rules_essential.md          # 10 P0 rules (< 2K tokens) — always loaded
+├── rules_full.md               # Complete rulebook by domain
+├── skills.md                   # Coding patterns & conventions
+├── rules_uiux.md               # UI/UX rules
+├── skills_uiux.md              # UI/UX patterns & design system
+├── KICKSTART.md                # Manual Orchestrator activation
+├── .vibe/
+│   ├── config.yaml             # Framework configuration
+│   └── agents/                 # 15 agent prompts
+│       ├── 00-orchestrator.md  # ← The entry point
+│       ├── 01-brainstorm.md
+│       └── ...
+├── .cursor/rules/              # Auto-generated Cursor config
+├── system_vault/
+│   ├── LOGS.md                 # Structured changelog
+│   ├── ARCHITECTURE.md         # Architecture decisions
+│   ├── CODE_INVENTORY.md       # Codebase map + patterns
+│   ├── RUNBOOK.md              # How to run/deploy/rollback
+│   ├── SESSION_LOG.md          # Agent session logs (traceability)
+│   └── CONTEXT_SNAPSHOT.md     # Context for session resume
+├── planning_artifacts/         # Planning docs (PRD, AC Pack...)
+├── implementation_artifacts/   # Implementation docs
+├── audit_out/                  # Audit agent outputs
+├── ux_out/                     # UI/UX agent outputs
+└── training_out/               # Training agent outputs
+```
+
+---
+
 ## Definition of Done (Global)
 
 A feature is DONE when:
@@ -211,32 +260,10 @@ A feature is DONE when:
 - [ ] Review PASS
 - [ ] QA PASS (execution mode declared)
 - [ ] Audit score SME ≥ 7 (if triggered)
-- [ ] Product alignment verified
-- [ ] System vault up to date (LOGS + ARCHITECTURE + CODE_INVENTORY + RUNBOOK)
+- [ ] System vault up to date
 - [ ] SESSION_LOG up to date
 - [ ] CONTEXT_SNAPSHOT up to date
 - [ ] Vibecoder confirms: **"DONE"**
-
----
-
-## Comparison with BMAD
-
-| Dimension | Vibe Framework | BMAD v6 |
-|-----------|---------------|---------|
-| Context Management | ✅ Built-in protocol | ❌ Relies on IDE |
-| Session Traceability | ✅ Mandatory logging | ❌ Sprint status only |
-| Audit Depth | ✅ 13 dimensions, dual scoring | ⚠️ Basic QA |
-| Rules Tiering | ✅ Essential/Full/Domain | ❌ Monolithic |
-| Solo Vibecoder Focus | ✅ Designed for it | ⚠️ Team-oriented |
-| CLI Installer | ✅ npx install | ✅ npx install |
-| IDE Integration | ⚠️ Manual agent copy | ✅ Auto-generated commands |
-| Module Ecosystem | ❌ Monolithic | ✅ Modular npm packages |
-| Path Segregation | ✅ Planning vs Implementation | ✅ Same concept |
-| Agent Count | 14 | 12+ |
-
-**Vibe Framework** is for the solo vibecoder who ships to production and needs traceability, context management, and deep quality gates.
-
-**BMAD** is for teams that need IDE automation, module marketplace, and cross-platform support.
 
 ---
 
